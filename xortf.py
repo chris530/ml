@@ -1,0 +1,39 @@
+#!/usr/local/Cellar/python@2/2.7.14_3/bin/python
+
+from tflearn import DNN
+from tflearn.layers.core import input_data, dropout, fully_connected
+from tflearn.layers.estimator import regression
+
+#Training examples
+X = [[0,0], [0,1], [1,0], [1,1]]
+Y = [[0], [1], [1], [0]]
+
+input_layer = input_data(shape=[None, 2]) #input layer of size 2
+hidden_layer = fully_connected(input_layer , 2, activation='tanh') #hidden layer of size 2
+output_layer = fully_connected(hidden_layer, 1, activation='tanh') #output layer of size 1
+
+#use Stohastic Gradient Descent and Binary Crossentropy as loss function
+regression = regression(output_layer , optimizer='sgd', loss='binary_crossentropy', learning_rate=5)
+model = DNN(regression)
+
+#fit the model
+model.fit(X, Y, n_epoch=5000, show_metric=True);
+
+#predict all examples
+print ('Expected:  ', [i[0] > 0 for i in Y])
+print ('Predicted: ', [i[0] > 0 for i in model.predict(X)])
+
+#Did this work ( from Chris ) 
+
+print "Prints int results ( positive is True, ex 0.99 ,  False is -0.99 )"
+for i in model.predict(X):
+  print i
+
+print ""
+print "Should be 0"
+print model.predict([[0,0]])
+
+print ""
+print "Should be 1"
+print model.predict([[1,0]])
+
