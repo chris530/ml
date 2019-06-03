@@ -2,7 +2,7 @@
 
 
 # Back-Propagation Neural Networks
-# 
+#
 # Written in Python.  See http://www.python.org/
 # Placed in the public domain.
 # Neil Schemenauer <nas@arctrix.com>
@@ -18,6 +18,10 @@ def rand(a, b):
     return (b-a)*random.random() + a
 
 # Make a matrix (we could use NumPy to speed this up)
+#
+#  Looks like this, with passing 2, 2  python test.py
+#[[0.0, 0.0], [0.0, 0.0]]
+#
 def makeMatrix(I, J, fill=0.0):
     m = []
     for i in range(I):
@@ -40,10 +44,13 @@ class NN:
         self.no = no
 
         # activations for nodes
+        #
+        #  ai  , stands for activations, ex ai ,  activation input node
+
         self.ai = [1.0]*self.ni
         self.ah = [1.0]*self.nh
         self.ao = [1.0]*self.no
-        
+
         # create weights
         self.wi = makeMatrix(self.ni, self.nh)
         self.wo = makeMatrix(self.nh, self.no)
@@ -55,9 +62,15 @@ class NN:
             for k in range(self.no):
                 self.wo[j][k] = rand(-2.0, 2.0)
 
-        # last change in weights for momentum   
+        # last change in weights for momentum
         self.ci = makeMatrix(self.ni, self.nh)
         self.co = makeMatrix(self.nh, self.no)
+
+        print "===Random Weights==="
+        print self.wi
+        print ""
+        print self.wo
+        print "===Random Weights==="
 
     def update(self, inputs):
         if len(inputs) != self.ni-1:
@@ -86,14 +99,35 @@ class NN:
 
 
     def backPropagate(self, targets, N, M):
+
+        print "Starting back prop"
+
         if len(targets) != self.no:
             raise ValueError('wrong number of target values')
 
         # calculate error terms for output
+        #
+        # self.no == 0 in this ex
+
+
         output_deltas = [0.0] * self.no
+
+
         for k in range(self.no):
             error = targets[k]-self.ao[k]
             output_deltas[k] = dsigmoid(self.ao[k]) * error
+
+            print self.ao[k] 
+
+            ##  print "targets /  activation output / error ",  targets[k],  self.ao[k], error
+            ##
+            ## This is looking at the target ( whats it's suppose to be ),  minus the activate which the sum is
+            ##  error,   ex I wanted 0 , but got 0 ,   my activation output is 0.0350080340569,
+            ##  0 - 0.0350080340569 ,   so my error is -0.0350080340569
+            ##
+            ##
+            ##
+            ##
 
         # calculate error terms for hidden
         hidden_deltas = [0.0] * self.nh
@@ -138,7 +172,8 @@ class NN:
         for j in range(self.nh):
             print(self.wo[j])
 
-    def train(self, patterns, iterations=1000, N=0.5, M=0.1):
+    def train(self, patterns, iterations=1, N=0.5, M=0.1):
+
         # N: learning rate
         # M: momentum factor
         for i in range(iterations):
@@ -166,7 +201,7 @@ def demo():
     # train it with some patterns
     n.train(pat)
     # test it
-    n.test(pat)
+    # n.test(pat)
 
 
 
