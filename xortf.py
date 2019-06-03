@@ -1,4 +1,4 @@
-#!/usr/local/Cellar/python@2/2.7.14_3/bin/python
+#!/usr/local/bin/python3.7
 
 from tflearn import DNN
 from tflearn.layers.core import input_data, dropout, fully_connected
@@ -14,7 +14,7 @@ output_layer = fully_connected(hidden_layer, 1, activation='tanh') #output layer
 
 #use Stohastic Gradient Descent and Binary Crossentropy as loss function
 regression = regression(output_layer , optimizer='sgd', loss='binary_crossentropy', learning_rate=5)
-model = DNN(regression)
+model = DNN(regression, tensorboard_verbose=3)
 
 #fit the model
 model.fit(X, Y, n_epoch=5000, show_metric=True);
@@ -25,15 +25,15 @@ print ('Predicted: ', [i[0] > 0 for i in model.predict(X)])
 
 #Did this work ( from Chris ) 
 
-print "Prints int results ( positive is True, ex 0.99 ,  False is -0.99 )"
+print ("Prints int results ( positive is True, ex 0.99 ,  False is -0.99 )")
 for i in model.predict(X):
-  print i
+  print(i)
 
-print ""
-print "Should be 0"
-print model.predict([[0,0]])
+print ("")
+print ("Should be 0")
+print (model.predict([[0,0]]))
 
-print ""
-print "Should be 1"
-print model.predict([[1,0]])
+print ("")
+print ("Should be 1")
+print (model.predict([[1,0]]))
 
