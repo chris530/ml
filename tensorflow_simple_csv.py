@@ -28,6 +28,8 @@ categories='Plants'
 train_path = tf.keras.utils.get_file(train_ds_url.split('/')[-1], train_ds_url)
 test_path = tf.keras.utils.get_file(test_ds_url.split('/')[-1], test_ds_url)
 
+# pop removes the Plants columns
+
 train = pd.read_csv(train_path, names=ds_columns, header=0)
 train_plantfeatures, train_categories = train, train.pop(categories)
 
